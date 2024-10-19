@@ -59,3 +59,29 @@ Proyecto de ingeniería de características 2024-2 EDUCACIÓN Y SALUD MENTAL
 
 --------
 
+## Ejecutando proyecto
+
+1. Primero se tiene que creear el entorno ejecutando:
+
+    ```bash
+    make venv
+    ```
+
+2. Luego, se instalan las dependencias especificadas dentro del archivo 'requirements.txt':
+    ```bash
+    make install 
+    ```
+
+3. Se descargan los dos conjuntos de datos:
+    ```bash
+    make download 
+    ```
+
+4. Se procesan los dos conjuntos de datos:
+    ```bash
+    make process
+    ```
+
+
+# Licencia
+Este proyecto se rige bajo la licencia de MIT.
