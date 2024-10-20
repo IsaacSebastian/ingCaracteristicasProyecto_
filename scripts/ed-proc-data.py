@@ -3,7 +3,7 @@ import pandas as pd
 import re
 # Censos de Población y Vivienda
 
-CENSOS_DE_POBLACION_Y_VIVIENDA_PATH="{{ cookiecutter.project_slug }}/Data/raw/DATOS EDUCACION/CENSOS DE POBLACION Y VIVIENDA"# Ruta en donde se encuentran los datos de Censos
+CENSOS_DE_POBLACION_Y_VIVIENDA_PATH="data/raw/DATOS EDUCACION/CENSOS DE POBLACION Y VIVIENDA"# Ruta en donde se encuentran los datos de Censos
 work_directory=CENSOS_DE_POBLACION_Y_VIVIENDA_PATH
 
 """

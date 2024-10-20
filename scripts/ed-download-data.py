@@ -5,8 +5,8 @@ from io import BytesIO
 from datetime import datetime
 import subprocess
 
-data_path="{{ cookiecutter.project_slug }}/Data/raw/DATOS EDUCACION"
-
+data_path="data/raw/DATOS EDUCACION"
+os.mkdir(data_path)
 def nombre_archivo(url):
     """
     url:URL de descarga del archivo que se quiere extraer el nombre

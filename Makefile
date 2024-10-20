@@ -6,6 +6,11 @@ PROJECT_NAME = ingCaracteristicasProyecto_
 PYTHON_VERSION = 3.10
 PYTHON_INTERPRETER = python
 
+
+DOWNLOAD_SCRIPT_ED=scripts/ed-download-data.py  
+PROCESS_SCRIPT_ED=scripts/ed-proc-data.py
+
+
 #################################################################################
 # COMMANDS                                                                      #
 #################################################################################
@@ -50,11 +55,20 @@ create_environment:
 
 
 
+.PHONY: venv
+venv:
+	\nworkon $(PROJECT_NAME)
 #################################################################################
 # PROJECT RULES                                                                 #
 #################################################################################
 
+## Download Data
+download:venv
+	$(PYTHON_EXEC) $(DOWNLOAD_SCRIPT_ED)
 
+## Process Data
+process:venv
+	$(PYTHON_EXEC) $(PROCESS_SCRIPT_ED)
 ## Make Dataset
 .PHONY: data
 data: requirements
