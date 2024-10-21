@@ -6,7 +6,12 @@ from datetime import datetime
 import subprocess
 
 data_path="data/raw/DATOS EDUCACION"
-os.mkdir(data_path)
+
+if not(os.path.exists(data_path)):
+    print(f"Creando {data_path} ...")
+
+os.makedirs(data_path,exist_ok=True)
+
 def nombre_archivo(url):
     """
     url:URL de descarga del archivo que se quiere extraer el nombre
@@ -56,7 +61,7 @@ def descargar_archivo_zip(url,file_name="",folder=""):
         # Abrimos y extraemos el contenido
         with zipfile.ZipFile(BytesIO(response.content)) as z:
             z.extractall(extract_to)
-            print(f'El contenido de {url} se extrajo a {extract_to}')
+            print(f'Archivo guardado {file_name}')
     else:
         print(f'Error al descargar {url}, status code: {response.status_code}')
 
@@ -79,7 +84,7 @@ def descargar_archivo_xlsx(url,file_name,folder=""):
         # Se guarda el contenido
         with open(file_path, 'wb') as f:
             f.write(response.content)
-        print(f'Descarga completa:{url}')
+        #print(f'Descarga completa:{url}')
         print(f'Archivo guardado:{file_name}')
     else:
         print('Error al intentar descargar el archivo, status code:', response.status_code)
@@ -148,6 +153,8 @@ ccpv_siglo_XXI= [
     ]
 
 
+print("Empezando descarga de Censos de Población...")
+
 # Descargar datos del censo del siglo XX
 for item in ccpv_siglo_XX:
     folder="CENSOS DE POBLACION Y VIVIENDA"# Configurar
@@ -189,6 +196,10 @@ for item in ccpv_siglo_XXI:
     with open(f"{data_path}/descriptions/{folder}/{item['file_name']}_details.txt",'w') as file:
         file.write(string)
 
+print("%\%","-"*80,"%\%")
+print("Contenido de Censos descargado !")
+print("%\%","-"*80,"%\%")
+
 # Encuesta Nacional Sobre Acceso y Permanencia en la Educación 2021
 enape_2021=[
 
@@ -199,6 +210,9 @@ enape_2021=[
         }
         
     ]
+
+
+print("Empezando descarga de datos de ENAPE 2021...")
 
 # Descargar datos del ENAPE
 
@@ -221,6 +235,10 @@ for item in enape_2021:
     with open(f"{data_path}/descriptions/{folder}/{item['file_name']}_details.txt",'w') as file:
         file.write(string)        
 
+print("%\%","-"*80,"%\%")
+print("Contenido de ENAPE 2021 descargado !")
+print("%\%","-"*80,"%\%")
+
 # Enlace de reporte SEP indicadores educativos 2023
 sep_2023=[
         {
@@ -238,6 +256,14 @@ command = (
     'curl -O https://www.planeacion.sep.gob.mx/Doc/estadistica_e_indicadores/indicadores/reporte_indicadores_educativos_sep_2023.xls'
 )
 
+print("Empezando descarga de reporte SEP 2023...")
+
+
 execute=subprocess.run(command,shell=True,capture_output=True,text=True)
 print(execute.stdout)
 print(execute.stderr)
+
+
+print("%\%","-"*80,"%\%")
+print("Contenido de reporte SEP 2023 descargado !")
+print("%\%","-"*80,"%\%")
