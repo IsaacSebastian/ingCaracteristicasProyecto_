@@ -196,9 +196,9 @@ for item in ccpv_siglo_XXI:
     with open(f"{data_path}/descriptions/{folder}/{item['file_name']}_details.txt",'w') as file:
         file.write(string)
 
-print("%\%","-"*80,"%\%")
+print("%","-"*80,"%")
 print("Contenido de Censos descargado !")
-print("%\%","-"*80,"%\%")
+print("%","-"*80,"%")
 
 # Encuesta Nacional Sobre Acceso y Permanencia en la Educación 2021
 enape_2021=[
@@ -235,9 +235,9 @@ for item in enape_2021:
     with open(f"{data_path}/descriptions/{folder}/{item['file_name']}_details.txt",'w') as file:
         file.write(string)        
 
-print("%\%","-"*80,"%\%")
+print("%","-"*80,"%")
 print("Contenido de ENAPE 2021 descargado !")
-print("%\%","-"*80,"%\%")
+print("%","-"*80,"%")
 
 # Enlace de reporte SEP indicadores educativos 2023
 sep_2023=[
@@ -250,7 +250,7 @@ sep_2023=[
 # Descarga reporte del SEP 2023
 # Hubo un problema con la descarga normal, entonces se descargaron los datos con el shell
 command = (
-    'cd "{{ cookiecutter.project_slug }}/Data/raw/DATOS EDUCACION" && '
+    'cd "data/raw/DATOS EDUCACION" && '
     'mkdir "REPORTE DE INDICADORES EDUCATIVOS" && '
     'cd "REPORTE DE INDICADORES EDUCATIVOS" && '
     'curl -O https://www.planeacion.sep.gob.mx/Doc/estadistica_e_indicadores/indicadores/reporte_indicadores_educativos_sep_2023.xls'
@@ -264,6 +264,6 @@ print(execute.stdout)
 print(execute.stderr)
 
 
-print("%\%","-"*80,"%\%")
+print("%","-"*80,"%")
 print("Contenido de reporte SEP 2023 descargado !")
-print("%\%","-"*80,"%\%")
+print("%","-"*80,"%")
