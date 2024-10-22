@@ -4,7 +4,26 @@
 
 PROJECT_NAME = ingCaracteristicasProyecto_
 PYTHON_VERSION = 3.10
-PYTHON_INTERPRETER = python
+PYTHON_INTERPRETER = python3
+VENV_DIR=venv
+
+DOWNLOAD_SCRIPT_ED=scripts/ed-download-data.py  
+PROCESS_SCRIPT_ED=scripts/ed-proc-data.py
+
+
+
+# Detect OS
+ifeq ($(OS),Windows_NT)
+    # Windows 
+    VENV_ACTIVATE=$(VENV_DIR)\Scripts\activate.bat
+    PYTHON_EXEC=$(VENV_DIR)\Scripts\python
+    PIP_EXEC=$(VENV_DIR)\Scripts\pip
+else
+    # macOS/Linux
+    VENV_ACTIVATE=$(VENV_DIR)/bin/activate
+    PYTHON_EXEC=$(VENV_DIR)/bin/python3
+    PIP_EXEC=$(VENV_DIR)/bin/pip3
+endif
 
 #################################################################################
 # COMMANDS                                                                      #
@@ -14,8 +33,8 @@ PYTHON_INTERPRETER = python
 ## Install Python Dependencies
 .PHONY: requirements
 requirements:
-	$(PYTHON_INTERPRETER) -m pip install -U pip
-	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
+	$(PIP_EXEC) install --upgrade pip setuptools wheel
+	$(PIP_EXEC) install -r requirements.txt -v
 	
 
 
@@ -42,19 +61,22 @@ format:
 
 
 ## Set up python interpreter environment
-.PHONY: create_environment
-create_environment:
-	@bash -c "if [ ! -z `which virtualenvwrapper.sh` ]; then source `which virtualenvwrapper.sh`; mkvirtualenv $(PROJECT_NAME) --python=$(PYTHON_INTERPRETER); else mkvirtualenv.bat $(PROJECT_NAME) --python=$(PYTHON_INTERPRETER); fi"
-	@echo ">>> New virtualenv created. Activate with:\nworkon $(PROJECT_NAME)"
+.PHONY: environment
+environment:
+	python3 -m venv $(VENV_DIR)
 	
-
-
 
 #################################################################################
 # PROJECT RULES                                                                 #
 #################################################################################
 
+## Download Data
+download:
+	$(PYTHON_EXEC) $(DOWNLOAD_SCRIPT_ED)
 
+## Process Data
+process:
+	$(PYTHON_EXEC) $(PROCESS_SCRIPT_ED)
 ## Make Dataset
 .PHONY: data
 data: requirements

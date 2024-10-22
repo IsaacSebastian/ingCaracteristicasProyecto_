@@ -3,13 +3,14 @@ import pandas as pd
 import re
 # Censos de Población y Vivienda
 
-CENSOS_DE_POBLACION_Y_VIVIENDA_PATH="{{ cookiecutter.project_slug }}/Data/raw/DATOS EDUCACION/CENSOS DE POBLACION Y VIVIENDA"# Ruta en donde se encuentran los datos de Censos
+CENSOS_DE_POBLACION_Y_VIVIENDA_PATH="data/raw/DATOS EDUCACION/CENSOS DE POBLACION Y VIVIENDA"# Ruta en donde se encuentran los datos de Censos
 work_directory=CENSOS_DE_POBLACION_Y_VIVIENDA_PATH
 
 """
 Se extraen los datos a un dataframe por archivo, y se guardan en una lista.
 
 """
+print(" Cargando dataframes de archivos descargados...")
 dataframes=[] # Lista de dataframes
 diccionarios_de_datos=[]
 for item in os.listdir(work_directory):
@@ -34,7 +35,7 @@ for item in os.listdir(work_directory):
     # En este caso particular, el resto de los archivos son de tipo excel
     else:
         file_path=item_path
-        print(file_path)
+        #print(file_path)
         df=pd.read_excel(file_path,sheet_name=1,skiprows=4)
     
     dataframes.append(df)
@@ -58,8 +59,8 @@ def revision_nulos(df):
     for column in df.columns:
         nans=0
         nans=df[column].isna().sum()
-        if nans!=0:
-            print(f"{round(100*nans/total_rows,4)}% de los registros en {column} son nulos")
+        #if nans!=0:
+            #print(f"{round(100*nans/total_rows,4)}% de los registros en {column} son nulos")
 
 
 def formato_columnas(df,format_columns):
@@ -118,9 +119,12 @@ def filtro_columnas(df,dictionary_dataframe,columns):
     df=df[columns]
     return df
 
+
+print("Iniciamos proceso de censos 1950-1995:")
 processed_dataframes=[] # Aquí guardaremos los dataframes despues de procesar los datos
 
 # Censo de 1950 : Población de 6 a 29 años que asisten a instituciones de enseñanza, por entidad federativa y sexo, según edad(1950)
+
 
 df=dataframes_order_year[0]
 unnamed_columns=df.columns.to_list()[3:10] # Columnas que no vienen nombradas correctamente por estructura en la que se guardo el excel.
@@ -142,6 +146,11 @@ for column in format_columns:
 revision_nulos(df) # Si no imprime nada, significa que no se encontraron registros nulos
 
 processed_dataframes.append(['1950',df])
+
+print("Censo 1950 procesado correctamente!")
+
+
+
 
 # Censo 1960 : Población de 6 años y más, por entidad federativa, área urbana y rural, alfabetismo y sexo, según grupos de edad(1960)
 df=dataframes_order_year[1]
@@ -178,7 +187,7 @@ for column in format_columns:
 revision_nulos(df)
 
 processed_dataframes.append(['1960',df])
-df.info()
+print("Censo 1960 procesado correctamente!")
 
 # Censo 1970 : Población de 6 años y más, por entidad federativa, tamaño de la localidad y grupos de edad, según condición de alfabetismo y sexo (1970)
 df=dataframes_order_year[2]
@@ -205,6 +214,7 @@ for column in format_columns:
     df[column]=df[column].astype('int')
 
 processed_dataframes.append(['1970',df])
+print("Censo 1970 procesado correctamente!")
 
 # Censo 1980 : Población de 15 años y más, por entidad federativa, tamaño de localidad y grupos quinquenales de edad, según condición de alfabetismo y sexo (1980)
 df=dataframes_order_year[3]
@@ -233,6 +243,7 @@ for column in format_columns:
 
 
 processed_dataframes.append(['1980',df])
+print("Censo 1980 procesado correctamente!")
 
 
 # Censo 1990 : Población de 6 a 14 años por entidad federativa y edad desplegada según aptitud para leer y escribir y sexo (1990)
@@ -265,7 +276,7 @@ for column in unnamed_columns[9:]:
 
 
 df=df.rename(columns=rename_dictionary)
-print(" Columnas renombradas correctamente!")
+#print(" Columnas renombradas correctamente!")
 
 
 # Remover registros 
@@ -279,6 +290,7 @@ for column in format_columns:
     df[column]=df[column].astype('int')
 
 processed_dataframes.append(['1990',df])
+print("Censo 1990 procesado correctamente!")
 
 
 # Censo 1995 : ## Población de 6 a 14 años por entidad federativa y edad desplegada según aptitud para leer y escribir y sexo (1995)
@@ -312,7 +324,7 @@ for column in unnamed_columns[9:]:
 
 
 df=df.rename(columns=rename_dictionary)
-print(" Columnas renombradas correctamente!")
+#print(" Columnas renombradas correctamente!")
 
 
 # Remover registros 
@@ -326,8 +338,11 @@ for column in format_columns:
     df[column]=df[column].astype('int')
 
 processed_dataframes.append(['1995',df])
+print("Censo 1995 procesado correctamente!")
 
-
+print()
+print()
+print("Comienzo de procesar dataframes de censos 2000-2020")
 # Censo 2000
 columns=[
     'Clave de entidad federativa',
@@ -443,6 +458,7 @@ df=df[~(df['Grado promedio de escolaridad']=='N/D')] # 1% de los registros conti
 df=df[~((df['Longitud']==', LA')|((df['Longitud']==', LA (R')))] # Solo dos registros tienen este valor erroneo
 formato_columnas(df,format_columns)
 processed_dataframes.append(['2000',df])
+print("Censo 2000 procesado correctamente!")
 
 
 # 2005 
@@ -554,6 +570,7 @@ df=df[~(df['Grado promedio de escolaridad']=='N/D')] # 1% de los registros conti
 df=df[~((df['Longitud']==', LA')|((df['Longitud']==', LA (R')))] # Solo dos registros tienen este valor erroneo
 formato_columnas(df,format_columns)
 processed_dataframes.append(['2005',df])
+print("Censo 2005 procesado correctamente!")
 
 
 # Censo 2010
@@ -814,6 +831,7 @@ df=df[~(df['Grado promedio de escolaridad']=='N/D')] # 1% de los registros conti
 df=df[~((df['Longitud']==', LA')|((df['Longitud']==', LA (R')))] # Solo dos registros tienen este valor erroneo
 formato_columnas(df,format_columns)
 processed_dataframes.append(['2010',df])
+print("Censo 2010 procesado correctamente!")
 
 
 # Censo 2020
@@ -1238,7 +1256,10 @@ df=df[~(df['Altitud']=='00-1')] # menos de 0.1% de los registros contienen  este
 df=df[~((df['Longitud']==', LA')|((df['Longitud']==', LA (R')))] # Solo dos registros tienen este valor erroneo
 formato_columnas(df,format_columns)
 processed_dataframes.append(['2020',df])
+print("Censo 2020 procesado correctamente!")
 
+os.makedirs("data/interim",exist_ok=True)
 for df in processed_dataframes:
-    file_path=f"{{{{ cookiecutter.project_slug }}}}/Data/processed/{df[0]}.csv"
+    file_path=f"data/interim/{df[0]}.csv"
+    
     df[1].to_csv(file_path)
