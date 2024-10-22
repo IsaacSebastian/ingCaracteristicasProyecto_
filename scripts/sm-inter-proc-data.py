@@ -1,4 +1,3 @@
-
 from dateutil import parser
 from datetime import datetime
 import os
@@ -17,7 +16,7 @@ def crear_archivo_texto(nombre_archivo):
     """
     fecha_hoy = datetime.now().strftime("%d/%m/%Y %H:%M")
 
-    ruta_guardado = os.path.join('..', 'Data', 'processed', nombre_archivo)
+    ruta_guardado = os.path.join('..', 'data', 'processed', nombre_archivo)
 
     os.makedirs(os.path.dirname(ruta_guardado), exist_ok=True)
 
@@ -112,12 +111,10 @@ def procesar_y_guardar(rutas_archivos, fechas, columnas_interes, renombrar_colum
         m (list): Lista para sep ;
     '''
     dataframes = []
-    
     for i, ruta in enumerate(rutas_archivos):
         file_path = os.path.join(*ruta)
         low_memory = i not in l  # Ajustar low_memory según sea necesario
         df = cargar_datos(file_path, i, m, low_memory=low_memory)
-        
         if fechas[i]:  # Si hay una fecha definida, agregarla
             df = agregar_fecha(df, fechas[i])
         df = filtrar_columnas(df, columnas_interes[i])
@@ -167,7 +164,7 @@ def fusionar_con_mapa(file_path_csv, file_path_shp):
     df_combinado = df_combinado.rename(columns={'NOMGEO': 'Entidad', 'Entidad': 'C_Entidad'})
 
     # Seleccionar las columnas de interés
-    df_combinado = df_combinado[['Edad', 'Sexo', 'C_Entidad', 'Entidad', 'Fecha', 'Atentar_contras_si', 'Depresion', 'Tristeza']]
+    df_combinado = df_combinado[['Folio','Edad', 'Sexo', 'C_Entidad', 'Entidad', 'Fecha', 'Atentar_contras_si', 'Depresion', 'Tristeza']]
 
     return df_combinado
 
@@ -183,8 +180,8 @@ def limpiar_y_transformar(df_combinado):
     # Reemplazar valores vacíos o nulos
     df_combinado = df_combinado.replace(['', ' ', '9'], np.nan)
     df_combinado = df_combinado.fillna(0)
-    
     # Convertir tipos de datos
+    df_combinado['Folio'] = df_combinado['Folio'].astype(str)
     df_combinado['Edad'] = df_combinado['Edad'].astype(int)
     df_combinado['Sexo'] = df_combinado['Sexo'].astype('category')
     df_combinado['Entidad'] = df_combinado['Entidad'].astype('category')
@@ -201,9 +198,9 @@ def limpiar_y_transformar(df_combinado):
     # Convertir otros tipos de datos
     df_combinado['Atentar_contras_si'] = df_combinado['Atentar_contras_si'].astype('category')
     df_combinado['Depresion'] = df_combinado['Depresion'].astype('category')
-    df_combinado['Tristeza'] = df_combinado['Tristeza'].astype('category')
+    df_adul['Tristeza'] =  df_combinado['Tristeza'].astype('category')
     df_combinado['C_Entidad'] = df_combinado['C_Entidad'].astype('category')
-
+    
     return df_combinado
 
 
@@ -211,15 +208,15 @@ def limpiar_y_transformar(df_combinado):
 def procesar_datos_ensanut():
     '''Función principal que ejecuta el flujo completo del proceso'''
     # Rutas de archivos
-    file_path_adol = os.path.join('..', 'Data', 'interim', 'Adolescentes.csv')
-    file_path_adul = os.path.join('..', 'Data', 'interim', 'Adultos.csv')
-    output_file_concatenado = os.path.join('..', 'Data', 'interim', 'Datos-Adol-Adul.csv')
+    file_path_adol = os.path.join('..', 'data', 'interim', 'Adolescentes.csv')
+    file_path_adul = os.path.join('..', 'data', 'interim', 'Adultos.csv')
+    output_file_concatenado = os.path.join('..', 'data', 'interim', 'Datos-Adol-Adul.csv')
 
     # Cargar, concatenar y guardar datos de adolescentes y adultos
     concatenado_path = cargar_y_concatenar_datos(file_path_adol, file_path_adul, output_file_concatenado)
 
     # Ruta del archivo shapefile
-    mapa_a = os.path.join('..', 'Data', 'raw', 'MAPA', '2023_1_00_ENT.shp')
+    mapa_a = os.path.join('..', 'data', 'raw', 'MAPA', '2023_1_00_ENT.shp')
 
     # Fusionar datos ENSA con el mapa
     df_combinado = fusionar_con_mapa(concatenado_path, mapa_a)
@@ -228,7 +225,7 @@ def procesar_datos_ensanut():
     df_combinado = limpiar_y_transformar(df_combinado)
 
     # Guardar el DataFrame procesado
-    output_file = os.path.join('..', 'Data', 'processed', 'Ensanut-data-p.csv')
+    output_file = os.path.join('..', 'data', 'processed', 'Ensanut-data-p.csv')
     df_combinado.to_csv(output_file, index=False, encoding='utf-8-sig')
 
     # Crear archivo de información
@@ -238,22 +235,22 @@ def procesar_datos_ensanut():
 
 def main():
     rutas_archivos_1 = [
-        ('..', 'Data', 'raw', 'DATOS ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2006.csv'),
-        ('..', 'Data', 'raw', 'DATOS ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2012.csv'),
-        ('..', 'Data', 'raw', 'DATOS ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2018.csv'),
-        ('..', 'Data', 'raw', 'DATOS ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2020.csv'),
-        ('..', 'Data', 'raw', 'DATOS ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2021.csv'),
-        ('..', 'Data', 'raw', 'DATOS ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2022.csv'),
-        ('..', 'Data', 'raw', 'DATOS ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2023.csv')
+        ('..', 'data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2006.csv'),
+        ('..', 'data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2012.csv'),
+        ('..', 'data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2018.csv'),
+        ('..', 'data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2020.csv'),
+        ('..', 'data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2021.csv'),
+        ('..', 'data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2022.csv'),
+        ('..', 'data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2023.csv')
     ]
     rutas_archivos_2 = [
-        ('..', 'Data', 'raw','DATOS ADULTOS', 'ENSANUT-Adultos-Datos-2006.csv'),
-        ('..', 'Data', 'raw','DATOS ADULTOS', 'ENSANUT-Adultos-Datos-2012.csv'),
-        ('..', 'Data', 'raw','DATOS ADULTOS', 'ENSANUT-Adultos-Datos-2018.csv'),
-        ('..', 'Data', 'raw','DATOS ADULTOS', 'ENSANUT-Adultos-Datos-2020.csv'),
-        ('..', 'Data', 'raw','DATOS ADULTOS', 'ENSANUT-Adultos-Datos-2021.csv'),
-        ('..', 'Data', 'raw','DATOS ADULTOS', 'ENSANUT-Adultos-Datos-2022.csv'),
-        ('..', 'Data', 'raw','DATOS ADULTOS', 'ENSANUT-Adultos-Datos-2023.csv')
+        ('..', 'data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2006.csv'),
+        ('..', 'data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2012.csv'),
+        ('..', 'data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2018.csv'),
+        ('..', 'data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2020.csv'),
+        ('..', 'data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2021.csv'),
+        ('..', 'data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2022.csv'),
+        ('..', 'data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2023.csv')
     ]
 
 
@@ -264,42 +261,42 @@ def main():
 
 
     columnas_interes_1 = [
-        ['edad', 'sexo', 'ent', 'Fecha', 'd510'],
-        ['edad', 'sexo', 'entidad', 'Fecha', 'd701'],
-        ['EDAD', 'SEXO', 'ENT', 'Fecha', 'P7_17', 'P5_1_3', 'P5_1_7'],
-        ['H0303', 'H0302', 'ENTIDAD', 'FECHA_INI', 'AD0217'],
-        ['edad', 'sexo', 'entidad', 'fecha_ini', 'd0819', 'd0601c', 'd0601g'],
-        ['edad', 'sexo', 'entidad', 'fecha_ini', 'd0819', 'd0601c', 'd0601g'],
-        ['edad', 'sexo', 'entidad', 'fecha_ini', 'd0819', 'd0601c', 'd0601g']
+        ['folio','edad', 'sexo', 'ent', 'Fecha', 'd510'],
+        ['ï»¿folio','edad', 'sexo', 'entidad', 'Fecha', 'd701'],
+        ['F_10A19','EDAD', 'SEXO', 'ENT', 'Fecha', 'P7_17', 'P5_1_3', 'P5_1_7'],
+        ['FOLIO_INT', 'H0303', 'H0302', 'ENTIDAD', 'FECHA_INI', 'AD0217'],
+        ['FOLIO_INT', 'edad', 'sexo', 'entidad', 'fecha_ini', 'd0819', 'd0601c', 'd0601g'],
+        ['FOLIO_INT','edad', 'sexo', 'entidad', 'fecha_ini', 'd0819', 'd0601c', 'd0601g'],
+        ['ï»¿FOLIO_INT','edad', 'sexo', 'entidad', 'fecha_ini', 'd0819', 'd0601c', 'd0601g']
     ]
 
     renombrar_columnas_map_1 = [
-        {'edad': 'Edad', 'sexo': 'Sexo', 'ent': 'Entidad', 'd510': 'Atentar_contras_si'},
-        {'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'd701': 'Atentar_contras_si'},
-        {'EDAD': 'Edad', 'SEXO': 'Sexo', 'ENT': 'Entidad', 'P7_17': 'Atentar_contras_si', 'P5_1_3': 'Depresion', 'P5_1_7': 'Tristeza'},
-        {'H0303': 'Edad', 'H0302': 'Sexo', 'ENTIDAD': 'Entidad', 'FECHA_INI': 'Fecha', 'AD0217': 'Atentar_contras_si'},
-        {'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'd0819': 'Atentar_contras_si', 'd0601c': 'Depresion', 'd0601g': 'Tristeza'},
-        {'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'd0819': 'Atentar_contras_si', 'd0601c': 'Depresion', 'd0601g': 'Tristeza'},
-        {'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'd0819': 'Atentar_contras_si', 'd0601c': 'Depresion', 'd0601g': 'Tristeza'}
+        {'folio':'Folio','edad': 'Edad', 'sexo': 'Sexo', 'ent': 'Entidad', 'd510': 'Atentar_contras_si'},
+        {'ï»¿folio':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'd701': 'Atentar_contras_si'},
+        {'F_10A19':'Folio', 'EDAD': 'Edad', 'SEXO': 'Sexo', 'ENT': 'Entidad', 'P7_17': 'Atentar_contras_si', 'P5_1_3': 'Depresion', 'P5_1_7': 'Tristeza'},
+        {'FOLIO_INT':'Folio','H0303': 'Edad', 'H0302': 'Sexo', 'ENTIDAD': 'Entidad', 'FECHA_INI': 'Fecha', 'AD0217': 'Atentar_contras_si'},
+        {'FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'd0819': 'Atentar_contras_si', 'd0601c': 'Depresion', 'd0601g': 'Tristeza'},
+        {'FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'd0819': 'Atentar_contras_si', 'd0601c': 'Depresion', 'd0601g': 'Tristeza'},
+        {'ï»¿FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'd0819': 'Atentar_contras_si', 'd0601c': 'Depresion', 'd0601g': 'Tristeza'}
     ]
     columnas_interes_2 = [
-        ['edad', 'sexo', 'ent','Fecha', 'a301a'],
-        ['edad', 'sexo', 'entidad', 'Fecha', 'd701'],
-        ['EDAD','SEXO', 'ENT','Fecha','P12_8','P2_1_3','P2_1_7'],
-        ['H0303','H0302', 'ENTIDAD','FECHA_INI','ADUL209'],
-        ['edad', 'sexo', 'entidad','fecha_ini','a1213', 'a0213','a0217'],
-        ['edad', 'sexo', 'entidad','fecha_ini','a1213', 'a0213','a0217'],
-        ['edad', 'sexo', 'entidad','fecha_ini','a1213', 'a0213','a0217']
+        ['folio', 'edad', 'sexo', 'ent','Fecha', 'a301a'],
+        ['ï»¿folio','edad', 'sexo', 'entidad', 'Fecha', 'd701'],
+        ['F_20MAS', 'EDAD','SEXO', 'ENT','Fecha','P12_8','P2_1_3','P2_1_7'],
+        ['FOLIO_INT','H0303','H0302', 'ENTIDAD','FECHA_INI','ADUL209'],
+        ['FOLIO_INT','edad', 'sexo', 'entidad','fecha_ini','a1213', 'a0213','a0217'],
+        ['FOLIO_INT','edad', 'sexo', 'entidad','fecha_ini','a1213', 'a0213','a0217'],
+        ['ï»¿FOLIO_INT','edad', 'sexo', 'entidad','fecha_ini','a1213', 'a0213','a0217']
     ]
 
     renombrar_columnas_map_2 = [
-        {'edad': 'Edad', 'sexo': 'Sexo', 'ent':'Entidad', 'a301a':'Tristeza'},
-        {'entidad': 'Entidad', 'sexo': 'Sexo', 'edad': 'Edad', 'a201_c': 'Depresion', 'a201_g': 'Tristeza'},
-        {'EDAD': 'Edad', 'SEXO': 'Sexo', 'ENT': 'Entidad', 'P12_8': 'Atentar_contras_si', 'P2_1_3': 'Depresion', 'P2_1_7': 'Tristeza'},
-        {'ENTIDAD': 'Entidad', 'FECHA_INI': 'Fecha', 'ADUL209': 'Atentar_contras_si', 'H0302':'Sexo', 'H0303':'Edad'},
-        {'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'a1213': 'Atentar_contras_si', 'a0213': 'Depresion', 'a0217': 'Tristeza'},
-        {'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'a1213': 'Atentar_contras_si', 'a0213': 'Depresion', 'a0217': 'Tristeza'},
-        {'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'a1213': 'Atentar_contras_si', 'a0213': 'Depresion', 'a0217': 'Tristeza'}
+        {'folio':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'ent':'Entidad', 'a301a':'Tristeza'},
+        {'ï»¿folio':'Folio', 'entidad': 'Entidad', 'sexo': 'Sexo', 'edad': 'Edad', 'a201_c': 'Depresion', 'a201_g': 'Tristeza'},
+        {'F_20MAS':'Folio','EDAD': 'Edad', 'SEXO': 'Sexo', 'ENT': 'Entidad', 'P12_8': 'Atentar_contras_si', 'P2_1_3': 'Depresion', 'P2_1_7': 'Tristeza'},
+        {'FOLIO_INT':'Folio', 'ENTIDAD': 'Entidad', 'FECHA_INI': 'Fecha', 'ADUL209': 'Atentar_contras_si', 'H0302':'Sexo', 'H0303':'Edad'},
+        {'FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'a1213': 'Atentar_contras_si', 'a0213': 'Depresion', 'a0217': 'Tristeza'},
+        {'FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'a1213': 'Atentar_contras_si', 'a0213': 'Depresion', 'a0217': 'Tristeza'},
+        {'ï»¿FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'a1213': 'Atentar_contras_si', 'a0213': 'Depresion', 'a0217': 'Tristeza'}
     ]
     l_1 = [0,4]
     l_2 = [0,2,3,4,5]
@@ -307,11 +304,11 @@ def main():
     
     # Procesar y guardar datos de adolescentes
     procesar_y_guardar(rutas_archivos_1, fechas_1, columnas_interes_1, renombrar_columnas_map_1, 
-                       os.path.join('..', 'Data', 'interim', 'Adolescentes.csv'),l_1, l_3)
+                       os.path.join('..', 'data', 'interim', 'Adolescentes.csv'),l_1, l_3)
     
     # Procesar y guardar datos de adultos
     procesar_y_guardar(rutas_archivos_2, fechas_2, columnas_interes_2, renombrar_columnas_map_2, 
-                       os.path.join('..', 'Data', 'interim', 'Adultos.csv'),l_2, l_3)
+                       os.path.join('..', 'data', 'interim', 'Adultos.csv'),l_2, l_3)
     
     # Ejecutar el procesamiento de datos
     procesar_datos_ensanut()
