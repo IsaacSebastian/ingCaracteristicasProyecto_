@@ -116,5 +116,5 @@ We will then aim to integrate the education and mental health data for a coheren
     ```
 
 
-# Licencia
+# License
 This project is under the MIT license.
