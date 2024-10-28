@@ -6,7 +6,7 @@
 </a>
 
 -------------------------------------------------------------------------
-Objective:
+## Objective:
 
 This project was created to complete assignments within the master's program in Data Science. It aims to analyze potential relationships between mental health and education among Mexican youth. Our goal is to answer the following questions:
 
@@ -78,7 +78,7 @@ We will then aim to integrate the education and mental health data for a coheren
 
 --------
 
-## Ejecutando proyecto
+## Running the Project
 
 1. First, clone the repository by running:
     ```bash
