@@ -8,8 +8,10 @@ PYTHON_INTERPRETER = python3
 VENV_DIR=venv
 
 DOWNLOAD_SCRIPT_ED=scripts/ed-download-data.py  
-PROCESS_SCRIPT_ED=scripts/ed-proc-data.py
-
+DOWNLOAD_SCRIPT_SM=scripts/sm-download-data.py  
+PROCESS_SCRIPT_ED=scripts/ed-proc-data.py  
+PROCESS_SCRIPT_SM=scripts/sm-inter-proc-data.py
+REPORT_SCRIPT_ED_SM=scripts/Ydata-SweetViz-datasets.py
 
 
 # Detect OS
@@ -33,7 +35,7 @@ endif
 ## Install Python Dependencies
 .PHONY: requirements
 requirements:
-	$(PIP_EXEC) install --upgrade pip setuptools wheel
+	$(PIP_EXEC) install --upgrade pip setuptools wheel numpy
 	$(PIP_EXEC) install -r requirements.txt -v
 	
 
@@ -73,10 +75,15 @@ environment:
 ## Download Data
 download:
 	$(PYTHON_EXEC) $(DOWNLOAD_SCRIPT_ED)
+	$(PYTHON_EXEC) $(DOWNLOAD_SCRIPT_SM)
 
 ## Process Data
 process:
 	$(PYTHON_EXEC) $(PROCESS_SCRIPT_ED)
+	$(PYTHON_EXEC) $(PROCESS_SCRIPT_SM)
+
+report:
+	$(PYTHON_EXEC) $(REPORT_SCRIPT_ED_SM)
 ## Make Dataset
 .PHONY: data
 data: requirements
