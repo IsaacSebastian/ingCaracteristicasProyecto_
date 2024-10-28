@@ -16,7 +16,7 @@ def crear_archivo_texto(nombre_archivo):
     """
     fecha_hoy = datetime.now().strftime("%d/%m/%Y %H:%M")
 
-    ruta_guardado = os.path.join('..', 'data', 'processed', nombre_archivo)
+    ruta_guardado = os.path.join('data', 'processed', nombre_archivo)
 
     os.makedirs(os.path.dirname(ruta_guardado), exist_ok=True)
 
@@ -96,6 +96,7 @@ def concatenar_y_guardar(dataframes, file_path):
     df_concat['Fecha'] = df_concat['Fecha'].apply(lambda x: pd.to_datetime(x, dayfirst=True, errors='coerce'))
 
     # Guardar el DataFrame en archivo CSV
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
     df_concat.to_csv(file_path, index=False)
 
 
@@ -141,6 +142,7 @@ def cargar_y_concatenar_datos(file_path_adol, file_path_adul, output_file):
     df_concatenado = pd.concat([df_adol, df_adul], axis=0, ignore_index=True)
 
     # Guardar el DataFrame concatenado
+    
     df_concatenado.to_csv(output_file, index=False)
     return output_file
 
@@ -198,7 +200,7 @@ def limpiar_y_transformar(df_combinado):
     # Convertir otros tipos de datos
     df_combinado['Atentar_contras_si'] = df_combinado['Atentar_contras_si'].astype('category')
     df_combinado['Depresion'] = df_combinado['Depresion'].astype('category')
-    df_adul['Tristeza'] =  df_combinado['Tristeza'].astype('category')
+    df_combinado['Tristeza'] =  df_combinado['Tristeza'].astype('category')
     df_combinado['C_Entidad'] = df_combinado['C_Entidad'].astype('category')
     
     return df_combinado
@@ -208,15 +210,15 @@ def limpiar_y_transformar(df_combinado):
 def procesar_datos_ensanut():
     '''Función principal que ejecuta el flujo completo del proceso'''
     # Rutas de archivos
-    file_path_adol = os.path.join('..', 'data', 'interim', 'Adolescentes.csv')
-    file_path_adul = os.path.join('..', 'data', 'interim', 'Adultos.csv')
-    output_file_concatenado = os.path.join('..', 'data', 'interim', 'Datos-Adol-Adul.csv')
+    file_path_adol = os.path.join('data', 'interim', 'Adolescentes.csv')
+    file_path_adul = os.path.join('data', 'interim', 'Adultos.csv')
+    output_file_concatenado = os.path.join('data', 'interim', 'Datos-Adol-Adul.csv')
 
     # Cargar, concatenar y guardar datos de adolescentes y adultos
     concatenado_path = cargar_y_concatenar_datos(file_path_adol, file_path_adul, output_file_concatenado)
 
     # Ruta del archivo shapefile
-    mapa_a = os.path.join('..', 'data', 'raw', 'MAPA', '2023_1_00_ENT.shp')
+    mapa_a = os.path.join('data', 'raw', 'MAPA', '2023_1_00_ENT.shp')
 
     # Fusionar datos ENSA con el mapa
     df_combinado = fusionar_con_mapa(concatenado_path, mapa_a)
@@ -225,7 +227,8 @@ def procesar_datos_ensanut():
     df_combinado = limpiar_y_transformar(df_combinado)
 
     # Guardar el DataFrame procesado
-    output_file = os.path.join('..', 'data', 'processed', 'Ensanut-data-p.csv')
+    output_file = os.path.join('data', 'processed', 'Ensanut-data-p.csv')
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
     df_combinado.to_csv(output_file, index=False, encoding='utf-8-sig')
 
     # Crear archivo de información
@@ -235,22 +238,22 @@ def procesar_datos_ensanut():
 
 def main():
     rutas_archivos_1 = [
-        ('..', 'data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2006.csv'),
-        ('..', 'data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2012.csv'),
-        ('..', 'data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2018.csv'),
-        ('..', 'data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2020.csv'),
-        ('..', 'data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2021.csv'),
-        ('..', 'data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2022.csv'),
-        ('..', 'data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2023.csv')
+        ('data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2006.csv'),
+        ('data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2012.csv'),
+        ('data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2018.csv'),
+        ('data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2020.csv'),
+        ('data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2021.csv'),
+        ('data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2022.csv'),
+        ('data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2023.csv')
     ]
     rutas_archivos_2 = [
-        ('..', 'data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2006.csv'),
-        ('..', 'data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2012.csv'),
-        ('..', 'data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2018.csv'),
-        ('..', 'data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2020.csv'),
-        ('..', 'data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2021.csv'),
-        ('..', 'data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2022.csv'),
-        ('..', 'data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2023.csv')
+        ('data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2006.csv'),
+        ('data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2012.csv'),
+        ('data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2018.csv'),
+        ('data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2020.csv'),
+        ('data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2021.csv'),
+        ('data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2022.csv'),
+        ('data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2023.csv')
     ]
 
 
@@ -304,11 +307,11 @@ def main():
     
     # Procesar y guardar datos de adolescentes
     procesar_y_guardar(rutas_archivos_1, fechas_1, columnas_interes_1, renombrar_columnas_map_1, 
-                       os.path.join('..', 'data', 'interim', 'Adolescentes.csv'),l_1, l_3)
+                       os.path.join('data', 'interim', 'Adolescentes.csv'),l_1, l_3)
     
     # Procesar y guardar datos de adultos
     procesar_y_guardar(rutas_archivos_2, fechas_2, columnas_interes_2, renombrar_columnas_map_2, 
-                       os.path.join('..', 'data', 'interim', 'Adultos.csv'),l_2, l_3)
+                       os.path.join('data', 'interim', 'Adultos.csv'),l_2, l_3)
     
     # Ejecutar el procesamiento de datos
     procesar_datos_ensanut()
