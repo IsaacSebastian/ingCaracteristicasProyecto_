@@ -72,7 +72,7 @@ def descargar_archivo_zip(url, data, folder_name, file_name, subfolder):
                 if zip_info.filename.endswith('.csv'):
                     # Generar la ruta completa para el archivo .csv
                     csv_file_name = file_name.replace('.zip', '.csv')
-                    csv_folder_path = os.path.join('..', 'data', 'raw', subfolder)
+                    csv_folder_path = os.path.join('data', 'raw', subfolder)
 
                     # Crear la carpeta si no existe
                     if not os.path.exists(csv_folder_path):
@@ -125,7 +125,7 @@ def crear_archivo_texto(nombre_archivo):
     """
     fecha_hoy = datetime.now().strftime("%d/%m/%Y %H:%M")
 
-    ruta_guardado = os.path.join('..', 'data', 'raw', nombre_archivo)
+    ruta_guardado = os.path.join('data', 'raw', nombre_archivo)
 
     os.makedirs(os.path.dirname(ruta_guardado), exist_ok=True)
 
@@ -155,8 +155,8 @@ def crear_archivo_texto(nombre_archivo):
 def main():
 # Carpeta principal
     main_folder = "ENSANUT-CATALOGOS"
-    folder_adolescentes = os.path.join('..', 'references', main_folder, "CATALOGOS ADOLESCENTES")
-    folder_adultos = os.path.join('..', 'references', main_folder, "CATALOGOS ADULTOS")
+    folder_adolescentes = os.path.join('references', main_folder, "CATALOGOS ADOLESCENTES")
+    folder_adultos = os.path.join('references', main_folder, "CATALOGOS ADULTOS")
     adolescentes_cat = [
         {
             "url": "https://ensanut.insp.mx/encuestas/ensa2000/descargas.php",
@@ -372,7 +372,7 @@ def main():
         print(f'La carpeta "ENSANUT-DATOS" no existe.')
     crear_archivo_texto('datos_ENSANUT.txt')
     url = 'https://www.inegi.org.mx/contenidos/descargadenue/MGdescarga/MGN2023_1/2023_1_00_ENT.zip'
-    carpeta_descarga = os.path.join('..', 'data', 'raw', 'MAPA')
+    carpeta_descarga = os.path.join('data', 'raw', 'MAPA')
     if not os.path.exists(carpeta_descarga):
       os.makedirs(carpeta_descarga)
     nombre_archivo = '2023_1_00_ENT.zip'
