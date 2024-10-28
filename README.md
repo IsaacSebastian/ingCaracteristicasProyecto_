@@ -1,11 +1,10 @@
 ![MCD](https://mcd.unison.mx/wp-content/themes/awaken/img/logo_mcd.png)
-# Educación y Salud Mental en México 
+# Education and Mental Health in Mexico
 
 <a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
     <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
 </a>
 
-Proyecto de ingeniería de características 2024-2
 -------------------------------------------------------------------------
 Objective:
 
