@@ -81,23 +81,38 @@ Posteriormente se buscará la manera de unir la información de educación y sal
 
 ## Ejecutando proyecto
 
-1. Primero se tiene que creear el entorno ejecutando:
-
+1. Primero vamos a clonar el repositorio, en nuestra terminal ejecutamos:
     ```bash
-    make venv
+    git clone https://github.com/IsaacSebastian/ingCaracteristicasProyecto_
     ```
 
-2. Luego, se instalan las dependencias especificadas dentro del archivo 'requirements.txt':
+2. Posteriormente, ejecutamos lo siguiente para ubicarnos en la copia del repositorio:
     ```bash
-    make install 
+    cd ingCaracteristicasProyecto_
     ```
 
-3. Se descargan los dos conjuntos de datos:
+3. Ahora, ejecutamos lo siguiente para crear el entorno:
+    ```bash
+    python -m venv venv
+    ```
+
+4. Activamos el entorno:
+    ```bash
+    venv\Scripts\activate
+    ```
+
+
+5. Luego, se instalan las dependencias especificadas dentro del archivo 'requirements.txt':
+    ```bash
+    make requirements 
+    ```
+
+6. Se descargan los dos conjuntos de datos:
     ```bash
     make download 
     ```
 
-4. Se procesan los dos conjuntos de datos:
+7. Se procesan los dos conjuntos de datos:
     ```bash
     make process
     ```
