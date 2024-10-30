@@ -1,30 +1,30 @@
-# ingCaracteristicasProyecto
+![MCD](https://mcd.unison.mx/wp-content/themes/awaken/img/logo_mcd.png)
+# Education and Mental Health in Mexico
 
 <a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
     <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
 </a>
 
-Proyecto de ingeniería de características 2024-2 EDUCACIÓN Y SALUD MENTAL
 -------------------------------------------------------------------------
-Objetivo:
+## Objective:
 
-Este proyecto se creó para completar asignaciones dentro de la maestría en ciencia de datos. Se analizará una posible relación entre el campo de salud mental y el de la educación en la población méxicana juvenil. Nuestro objetivo con este proyecto es lograr encontrar relaciones y/o hallazgos que nos ayuden responder de manera satisfactoria las preguntas:
+This project was created to complete assignments within the master's program in Data Science. It aims to analyze potential relationships between mental health and education among Mexican youth. Our goal is to answer the following questions:
 
-¿Habrá alguna relación entre el desempeño acádemico y la salud mental de los estudiantes jovenes?
+Is there a relationship between academic performance and students' mental health?
 
-¿En que parte de la república es más probable de abandonar la escuela, y/o tener problemas de salud mental?¿Estarán relacionados/vínculados?
+In which part of the country is school dropout or mental health issues more prevalent, and could they be related?
 
-¿Existe alguna relación entre la pertenencia en la escuela y la salud mental en la población juvenil mexicana?
+Does school belonging correlate with mental health among Mexican youth?
 
-Esperamos poder hallar resolución a estas incognitas y lograr comunicar nuestros hallazgos tanto al público general como directivos del área de educación.
+We hope to answer these questions and communicate our findings to the general public and education leaders.
 
-Acerca de las fuentes de datos
+Data Sources:
 
-Para la información relacionada con la educación en México, optamos por utilizar los resultados de encuestas del INEGI y un reporte del SEP de indicadores educativos del 2023: Nos apoyaremos del Censo General de Población y Vivienda de varios años para obtener información georeferencial y temporal sobre la población méxicana que estudia. La Encuesta Nacional sobre Acceso y Permanencia en la Educación (ENAPE) 2021 nos permitrá generar información estadística sobre el acceso y permanencia de la población de 0 a 29 años en el Sistema Educativo Nacional.
+For education-related data in Mexico, we will use INEGI survey results and a 2023 SEP report on educational indicators. We will also reference the General Census of Population and Housing for georeferenced and temporal data on Mexican students, along with the National Survey on Access and Continuity in Education (ENAPE) 2021 to generate statistics on educational access and continuity among individuals aged 0-29.
 
-Mientras que para los datos relacionados con la salud mental se tomó como fuente principal la Encuesta Nacional de Salud y Nutrición, ENSANUT, la cual se inició en año 2000. Se planeaba hacerla cada 6 años, sin embargo se realizó también en el 2016 y se lleva haciendo cada año desde el 2020. Dicha entrevista tiene dos apartados, salud y nutrición, y cada uno de estos se divide en adolesentes y mayores de 20 años en este proyecto se recauda cada catálogo de datos y los resultados de cada cuestionario de datos realizado, estos últimos se analizarán para saber si existe información sobre la salud mental de nuestros dos grupos de edades.
+For mental health data, our main source will be the National Health and Nutrition Survey (ENSANUT), which began in 2000. Initially planned as a six-year survey, it was also conducted in 2016 and annually since 2020. This survey has two main sections—health and nutrition—and each is divided into adolescent and adult segments. In this project, all available data catalogs and questionnaires will be collected and analyzed to identify information related to mental health for our target age groups.
 
-Posteriormente se buscará la manera de unir la información de educación y salud mental de una manera sensata y poder hacer una estadistica sobre estos datos.
+We will then aim to integrate the education and mental health data for a coherent statistical analysis.
 ## Project Organization
 
 ```
@@ -78,29 +78,43 @@ Posteriormente se buscará la manera de unir la información de educación y sal
 
 --------
 
-## Ejecutando proyecto
+## Running the Project
 
-1. Primero se tiene que creear el entorno ejecutando:
-
+1. First, clone the repository by running:
     ```bash
-    make venv
+    git clone https://github.com/IsaacSebastian/ingCaracteristicasProyecto_
     ```
 
-2. Luego, se instalan las dependencias especificadas dentro del archivo 'requirements.txt':
+2. Next, navigate to the repository:
     ```bash
-    make install 
+    cd ingCaracteristicasProyecto_
     ```
 
-3. Se descargan los dos conjuntos de datos:
+3. Create a virtual environment:
+    ```bash
+    python -m venv venv
+    ```
+
+4. Activate the virtual environment:
+    ```bash
+    venv\Scripts\activate
+    ```
+
+5. Install dependencies listed in 'requirements.txt':
+    ```bash
+    make requirements 
+    ```
+
+6. Download both data sets:
     ```bash
     make download 
     ```
 
-4. Se procesan los dos conjuntos de datos:
+7. Process both data sets:
     ```bash
     make process
     ```
 
 
-# Licencia
-Este proyecto se rige bajo la licencia de MIT.
+# License
+This project is under the MIT license.
