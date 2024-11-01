@@ -96,9 +96,14 @@ We will then aim to integrate the education and mental health data for a coheren
     ```
 
 4. Activate the virtual environment:
-    ```bash
-    source venv\bin\activate
-    ```
+    - Linux / macOS
+        ```bash
+        source venv\bin\activate
+        ```
+    - Windows
+        ```bash
+        .\venv\Scripts\activate
+        ```
 
 5. Download both data sets:
     ```bash
