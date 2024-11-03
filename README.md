@@ -38,6 +38,8 @@ We will then aim to integrate the education and mental health data for a coheren
 │   └── raw            <- The original, immutable data dump.
 │
 ├── docs               <- A default mkdocs project; see www.mkdocs.org for details
+├
+├── helpers            <- A directory for files that helps the development of the data-science project 
 │
 ├── models             <- Trained and serialized models, model predictions, or model summaries
 │
