@@ -38,6 +38,8 @@ We will then aim to integrate the education and mental health data for a coheren
 │   └── raw            <- The original, immutable data dump.
 │
 ├── docs               <- A default mkdocs project; see www.mkdocs.org for details
+├
+├── helpers            <- A directory for files that helps the development of the data-science project 
 │
 ├── models             <- Trained and serialized models, model predictions, or model summaries
 │
@@ -87,30 +89,30 @@ We will then aim to integrate the education and mental health data for a coheren
 
 2. Next, navigate to the repository:
     ```bash
-    cd ingCaracteristicasProyecto_
+    cd ./ingCaracteristicasProyecto_
     ```
 
-3. Create a virtual environment:
+3. Install dependencies listed in 'requirements.txt':
     ```bash
-    python -m venv venv
+    make venv 
     ```
 
 4. Activate the virtual environment:
-    ```bash
-    venv\Scripts\activate
-    ```
+    - Linux / macOS
+        ```bash
+        source venv\bin\activate
+        ```
+    - Windows
+        ```bash
+        .\venv\Scripts\activate
+        ```
 
-5. Install dependencies listed in 'requirements.txt':
-    ```bash
-    make requirements 
-    ```
-
-6. Download both data sets:
+5. Download both data sets:
     ```bash
     make download 
     ```
 
-7. Process both data sets:
+6. Process both data sets:
     ```bash
     make process
     ```

@@ -14,9 +14,10 @@ def crear_archivo_texto(nombre_archivo):
     Args:
         nombre_archivo (str): Nombre del archivo de texto a crear.
     """
+    
     fecha_hoy = datetime.now().strftime("%d/%m/%Y %H:%M")
 
-    ruta_guardado = os.path.join('data', 'processed', nombre_archivo)
+    ruta_guardado = os.path.join('data', 'interim', nombre_archivo)
 
     os.makedirs(os.path.dirname(ruta_guardado), exist_ok=True)
 
@@ -166,44 +167,12 @@ def fusionar_con_mapa(file_path_csv, file_path_shp):
     df_combinado = df_combinado.rename(columns={'NOMGEO': 'Entidad', 'Entidad': 'C_Entidad'})
 
     # Seleccionar las columnas de interés
-    df_combinado = df_combinado[['Folio','Edad', 'Sexo', 'C_Entidad', 'Entidad', 'Fecha', 'Atentar_contras_si', 'Depresion', 'Tristeza']]
+    df_combinado = df_combinado[['Folio','Edad', 'Sexo', 'C_Entidad', 'Entidad', 'Fecha', 'Atentar_contras_si', 'Depresion', 'Tristeza','Cuantos cigarrillos (numero)','Frecuencia emborrachar']]
 
     return df_combinado
 
 
 
-
-def limpiar_y_transformar(df_combinado):
-    '''Función para limpiar y transformar el DataFrame combinado
-    
-    Args:
-        df_combinado (DataFrame): Dataframe que se va a limpiar.
-    '''
-    # Reemplazar valores vacíos o nulos
-    df_combinado = df_combinado.replace(['', ' ', '9'], np.nan)
-    df_combinado = df_combinado.fillna(0)
-    # Convertir tipos de datos
-    df_combinado['Folio'] = df_combinado['Folio'].astype(str)
-    df_combinado['Edad'] = df_combinado['Edad'].astype(int)
-    df_combinado['Sexo'] = df_combinado['Sexo'].astype('category')
-    df_combinado['Entidad'] = df_combinado['Entidad'].astype('category')
-    
-    # Unificar formato de fecha utilizando una detección automática con parser
-    def parse_fecha(fecha):
-        try:
-            return parser.parse(fecha, dayfirst=True)
-        except (ValueError, TypeError):
-            return np.nan
-
-    df_combinado['Fecha'] = df_combinado['Fecha'].apply(parse_fecha)
-    
-    # Convertir otros tipos de datos
-    df_combinado['Atentar_contras_si'] = df_combinado['Atentar_contras_si'].astype('category')
-    df_combinado['Depresion'] = df_combinado['Depresion'].astype('category')
-    df_combinado['Tristeza'] =  df_combinado['Tristeza'].astype('category')
-    df_combinado['C_Entidad'] = df_combinado['C_Entidad'].astype('category')
-    
-    return df_combinado
 
 
 
@@ -223,11 +192,8 @@ def procesar_datos_ensanut():
     # Fusionar datos ENSA con el mapa
     df_combinado = fusionar_con_mapa(concatenado_path, mapa_a)
 
-    # Limpiar y transformar los datos
-    df_combinado = limpiar_y_transformar(df_combinado)
-
     # Guardar el DataFrame procesado
-    output_file = os.path.join('data', 'processed', 'Ensanut-data-p.csv')
+    output_file = os.path.join('data', 'interim', 'Ensanut-data-p.csv')
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     df_combinado.to_csv(output_file, index=False, encoding='utf-8-sig')
 
@@ -238,6 +204,7 @@ def procesar_datos_ensanut():
 
 def main():
     rutas_archivos_1 = [
+        ('data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2000.csv'),
         ('data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2006.csv'),
         ('data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2012.csv'),
         ('data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2018.csv'),
@@ -247,6 +214,7 @@ def main():
         ('data', 'raw', 'DATOS SALUD MENTAL ADOLESCENTES', 'ENSANUT-Adolescentes-Datos-2023.csv')
     ]
     rutas_archivos_2 = [
+        ('data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2000.csv'),
         ('data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2006.csv'),
         ('data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2012.csv'),
         ('data', 'raw','DATOS SALUD MENTAL ADULTOS', 'ENSANUT-Adultos-Datos-2018.csv'),
@@ -257,53 +225,57 @@ def main():
     ]
 
 
-    fechas_1 = ['31-07-2006', '31-07-2012', '31-07-2018', None, None, None, None]
-    fechas_2 = ['31-07-2006', '31-07-2012', '31-07-2018', None, None, None, None]
+    fechas_1 = [None, '31-07-2006', '31-07-2012', '31-07-2018', None, None, None, None]
+    fechas_2 = [None, '31-07-2006', '31-07-2012', '31-07-2018', None, None, None, None]
 
 
 
 
     columnas_interes_1 = [
-        ['folio','edad', 'sexo', 'ent', 'Fecha', 'd510'],
-        ['ï»¿folio','edad', 'sexo', 'entidad', 'Fecha', 'd701'],
-        ['F_10A19','EDAD', 'SEXO', 'ENT', 'Fecha', 'P7_17', 'P5_1_3', 'P5_1_7'],
-        ['FOLIO_INT', 'H0303', 'H0302', 'ENTIDAD', 'FECHA_INI', 'AD0217'],
-        ['FOLIO_INT', 'edad', 'sexo', 'entidad', 'fecha_ini', 'd0819', 'd0601c', 'd0601g'],
-        ['FOLIO_INT','edad', 'sexo', 'entidad', 'fecha_ini', 'd0819', 'd0601c', 'd0601g'],
-        ['ï»¿FOLIO_INT','edad', 'sexo', 'entidad', 'fecha_ini', 'd0819', 'd0601c', 'd0601g']
+        ['ï»¿folio_v', 'ent', 'sexo', 'edada', 'fecha', 'a1401','a1402_1', '1402_2', 'a1403_1','a1404','a1405'],
+        ['folio','edad', 'sexo', 'ent', 'Fecha', 'd510', 'd101', 'd102a', 'd102b', 'd103', 'd104'],
+        ['ï»¿folio','edad', 'sexo', 'entidad', 'Fecha', 'd701', 'd003', 'd101b', 'd101a', 'd109', 'd108'],
+        ['F_10A19','EDAD', 'SEXO', 'ENT', 'Fecha', 'P7_17', 'P5_1_3', 'P5_1_7', 'P1_1', 'P1_6_2', 'P1_9', 'P1_10', 'P1_11', 'P1_12', 'P1_2'],
+        ['FOLIO_INT', 'H0303', 'H0302', 'ENTIDAD', 'FECHA_INI', 'AD0217', 'AD1A01', 'AD1A03', 'AD1A05', 'AD1A06'],
+        ['FOLIO_INT', 'edad', 'sexo', 'entidad', 'fecha_ini', 'd0819', 'd0601c', 'd0601g', 'd0101', 'd0104', 'd0107', 'd0108'],
+        ['FOLIO_INT','edad', 'sexo', 'entidad', 'fecha_ini', 'd0819', 'd0601c', 'd0601g', 'd0101', 'd0104', 'd0107', 'd0108'],
+        ['ï»¿FOLIO_INT','edad', 'sexo', 'entidad', 'fecha_ini', 'd0819', 'd0601c', 'd0601g', 'd0101', 'd0104', 'd0107', 'd0108']
     ]
 
     renombrar_columnas_map_1 = [
-        {'folio':'Folio','edad': 'Edad', 'sexo': 'Sexo', 'ent': 'Entidad', 'd510': 'Atentar_contras_si'},
-        {'ï»¿folio':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'd701': 'Atentar_contras_si'},
-        {'F_10A19':'Folio', 'EDAD': 'Edad', 'SEXO': 'Sexo', 'ENT': 'Entidad', 'P7_17': 'Atentar_contras_si', 'P5_1_3': 'Depresion', 'P5_1_7': 'Tristeza'},
-        {'FOLIO_INT':'Folio','H0303': 'Edad', 'H0302': 'Sexo', 'ENTIDAD': 'Entidad', 'FECHA_INI': 'Fecha', 'AD0217': 'Atentar_contras_si'},
-        {'FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'd0819': 'Atentar_contras_si', 'd0601c': 'Depresion', 'd0601g': 'Tristeza'},
-        {'FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'd0819': 'Atentar_contras_si', 'd0601c': 'Depresion', 'd0601g': 'Tristeza'},
-        {'ï»¿FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'd0819': 'Atentar_contras_si', 'd0601c': 'Depresion', 'd0601g': 'Tristeza'}
+        {'ï»¿folio_v':'Folio', 'edada':'Edad', 'sexo':'Sexo', 'ent':'Entidad', 'fecha':'Fecha', 'a1401':'por lo menos cien cigarrillos', 'a1402_1':'Cuantos cigarrillos (frecuencia)', '1402_2':'Cuantos cigarrillos (numero)', 'a1403_1':'tiempo fumado(meses)', 'a1403_2':'tiempo fumado(anios)', 'a1404':'Que tan amenudo alcohol', 'a1405':'Frecuencia emborrachar'},
+        {'folio':'Folio','edad': 'Edad', 'sexo': 'Sexo', 'ent': 'Entidad', 'd510': 'Atentar_contras_si', 'd101':'por lo menos cien cigarrillos', 'd102a':'Cuantos cigarrillos (frecuencia)', 'd102b':'Cuantos cigarrillos (numero)', 'd103':'¿Tomas?' , 'd104':'Frecuencia emborrachar'},
+        {'ï»¿folio':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'd701': 'Atentar_contras_si','d003':'por lo menos cien cigarrillos', 'd101b':'Cuantos cigarrillos (numero)', 'd101a':'Cuantos cigarrillos (frecuencia)', 'd108':'Edad probar alcohol', 'd109':'Frecuencia emborrachar'},
+        {'F_10A19':'Folio', 'EDAD': 'Edad', 'SEXO': 'Sexo', 'ENT': 'Entidad', 'P7_17': 'Atentar_contras_si', 'P5_1_3': 'Depresion', 'P5_1_7': 'Tristeza', 'P1_1':'por lo menos cien cigarrillos', 'P1_2': 'Fumas?', 'P1_6_2':'Cuantos cigarrillos (numero)', 'P1_9':'Cigarrillos electronicos', 'P1_10':'Haz usado cigarrillos electronicos', 'P1_11':'Edad probar alcohol', 'P1_12':'Frecuencia emborrachar'},
+        {'FOLIO_INT':'Folio','H0303': 'Edad', 'H0302': 'Sexo', 'ENTIDAD': 'Entidad', 'FECHA_INI': 'Fecha', 'AD0217': 'Atentar_contras_si', 'AD1A01':'Fumas?', 'AD1A03':'Cuantos cigarrillos (numero)', 'AD1A05':'Haz usado cigarrillos electronicos', 'AD1A06':'Frecuencia emborrachar'},
+        {'FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'd0819': 'Atentar_contras_si', 'd0601c': 'Depresion', 'd0601g': 'Tristeza', 'd0101':'Fumas?', 'd0104':'Cuantos cigarrillos (numero)', 'd0107':'Haz usado cigarrillos electronicos', 'd0108':'Frecuencia emborrachar'},
+        {'FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'd0819': 'Atentar_contras_si', 'd0601c': 'Depresion', 'd0601g': 'Tristeza', 'd0101':'Fumas?', 'd0104':'Cuantos cigarrillos (numero)', 'd0107':'Haz usado cigarrillos electronicos', 'd0108':'Frecuencia emborrachar'},
+        {'ï»¿FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'd0819': 'Atentar_contras_si', 'd0601c': 'Depresion', 'd0601g': 'Tristeza', 'd0101':'Fumas?', 'd0104':'Cuantos cigarrillos (numero)', 'd0107':'Haz usado cigarrillos electronicos', 'd0108':'Frecuencia emborrachar'}
     ]
     columnas_interes_2 = [
-        ['folio', 'edad', 'sexo', 'ent','Fecha', 'a301a'],
-        ['ï»¿folio','edad', 'sexo', 'entidad', 'Fecha', 'd701'],
-        ['F_20MAS', 'EDAD','SEXO', 'ENT','Fecha','P12_8','P2_1_3','P2_1_7'],
-        ['FOLIO_INT','H0303','H0302', 'ENTIDAD','FECHA_INI','ADUL209'],
-        ['FOLIO_INT','edad', 'sexo', 'entidad','fecha_ini','a1213', 'a0213','a0217'],
-        ['FOLIO_INT','edad', 'sexo', 'entidad','fecha_ini','a1213', 'a0213','a0217'],
-        ['ï»¿FOLIO_INT','edad', 'sexo', 'entidad','fecha_ini','a1213', 'a0213','a0217']
+        ['ï»¿folio_v', 'ent', 'sexo', 'edada', 'fecha', 'a2101', 'a2103' ,'a2104', 'a2105', 'a2108', 'a2109'],
+        ['folio', 'edad', 'sexo', 'ent','Fecha', 'a301a', 'a1301', 'a1302', 'a1303a', 'a1303b', 'a1305', 'a1306a'],
+        ['ï»¿folio','edad', 'sexo', 'entidad', 'Fecha',  'a201_c',  'a201_g', 'a1301', 'a1303a', 'a1303b', 'a1311'],
+        ['F_20MAS', 'EDAD','SEXO', 'ENT','Fecha','P12_8','P2_1_3','P2_1_7', 'P13_1', 'P13_2', 'P13_6_1', 'P13_9', 'P13_11', 'P13_14'],
+        ['FOLIO_INT','H0303','H0302', 'ENTIDAD','FECHA_INI','ADUL209', 'ADUL1A01', 'ADUL1A03', 'ADUL1A05', 'ADUL1A07'],
+        ['FOLIO_INT','edad', 'sexo', 'entidad','fecha_ini','a1213', 'a0213','a0217', 'a1301', 'a1304', 'a1307', 'a1308'],
+        ['FOLIO_INT','edad', 'sexo', 'entidad','fecha_ini','a1213', 'a0213','a0217', 'a1301', 'a1304', 'a1307', 'a1308'],
+        ['ï»¿FOLIO_INT','edad', 'sexo', 'entidad','fecha_ini','a1213', 'a0213','a0217', 'a1301', 'a1304', 'a1307', 'a1308']
     ]
 
     renombrar_columnas_map_2 = [
-        {'folio':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'ent':'Entidad', 'a301a':'Tristeza'},
-        {'ï»¿folio':'Folio', 'entidad': 'Entidad', 'sexo': 'Sexo', 'edad': 'Edad', 'a201_c': 'Depresion', 'a201_g': 'Tristeza'},
-        {'F_20MAS':'Folio','EDAD': 'Edad', 'SEXO': 'Sexo', 'ENT': 'Entidad', 'P12_8': 'Atentar_contras_si', 'P2_1_3': 'Depresion', 'P2_1_7': 'Tristeza'},
-        {'FOLIO_INT':'Folio', 'ENTIDAD': 'Entidad', 'FECHA_INI': 'Fecha', 'ADUL209': 'Atentar_contras_si', 'H0302':'Sexo', 'H0303':'Edad'},
-        {'FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'a1213': 'Atentar_contras_si', 'a0213': 'Depresion', 'a0217': 'Tristeza'},
-        {'FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'a1213': 'Atentar_contras_si', 'a0213': 'Depresion', 'a0217': 'Tristeza'},
-        {'ï»¿FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'a1213': 'Atentar_contras_si', 'a0213': 'Depresion', 'a0217': 'Tristeza'}
+        {'ï»¿folio_v':'Folio', 'ent':'Entidad', 'sexo':'Sexo', 'edada':'Edad', 'fecha':'Fecha', 'a2101':'por lo menos cien cigarrillos', 'a2103':'Fumas?' ,'a2104':'Cuantos cigarrillos (frecuencia)', 'a2105':'Cuantos cigarrillos (numero)', 'a2108':'¿Tomas?', 'a2109':'Frecuencia emborrachar'},
+        {'folio':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'ent':'Entidad', 'a301a':'Tristeza', 'a1301':'por lo menos cien cigarrillos', 'a1302':'Fumas?', 'a1303a':'Cuantos cigarrillos (frecuencia)', 'a1303b':'Cuantos cigarrillos (numero)', 'a1305':'¿Tomas?', 'a1306a':'Frecuencia emborrachar'},
+        {'ï»¿folio':'Folio', 'entidad': 'Entidad', 'sexo': 'Sexo', 'edad': 'Edad', 'a201_c': 'Depresion', 'a201_g': 'Tristeza', 'a1301':'por lo menos cien cigarrillos', 'a1303a':'Cuantos cigarrillos (frecuencia)', 'a1303b':'Cuantos cigarrillos (numero)', 'a1311':'Frecuencia emborrachar'},
+        {'F_20MAS':'Folio','EDAD': 'Edad', 'SEXO': 'Sexo', 'ENT': 'Entidad', 'P12_8': 'Atentar_contras_si', 'P2_1_3': 'Depresion', 'P2_1_7': 'Tristeza', 'P13_1':'por lo menos cien cigarrillos', 'P13_2':'Fumas?', 'P13_6_1':'Cuantos cigarrillos (numero)', 'P13_9':'Haz usado cigarrillos electronicos', 'P13_11':'¿Tomas?', 'P13_14':'Frecuencia emborrachar'},
+        {'FOLIO_INT':'Folio', 'ENTIDAD': 'Entidad', 'FECHA_INI': 'Fecha', 'ADUL209': 'Atentar_contras_si', 'H0302':'Sexo', 'H0303':'Edad', 'ADUL1A01':'Fumas?', 'ADUL1A03':'Cuantos cigarrillos (numero)', 'ADUL1A05':'Haz usado cigarrillos electronicos', 'ADUL1A07':'Frecuencia emborrachar'},
+        {'FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'a1213': 'Atentar_contras_si', 'a0213': 'Depresion', 'a0217': 'Tristeza', 'a1301':'Fumas?', 'a1304':'Cuantos cigarrillos (numero)', 'a1307':'Haz usado cigarrillos electronicos', 'a1308':'Frecuencia emborrachar'},
+        {'FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'a1213': 'Atentar_contras_si', 'a0213': 'Depresion', 'a0217': 'Tristeza', 'a1301':'Fumas?', 'a1304':'Cuantos cigarrillos (numero)', 'a1307':'Haz usado cigarrillos electronicos', 'a1308':'Frecuencia emborrachar'},
+        {'ï»¿FOLIO_INT':'Folio', 'edad': 'Edad', 'sexo': 'Sexo', 'entidad': 'Entidad', 'fecha_ini': 'Fecha', 'a1213': 'Atentar_contras_si', 'a0213': 'Depresion', 'a0217': 'Tristeza', 'a1301':'Fumas?', 'a1304':'Cuantos cigarrillos (numero)', 'a1307':'Haz usado cigarrillos electronicos', 'a1308':'Frecuencia emborrachar'}
     ]
-    l_1 = [0,4]
-    l_2 = [0,2,3,4,5]
-    l_3 = [0,1]
+    l_1 = [1,5] #low memory adol
+    l_2 = [1,3,4,5,6] #low memory adults
+    l_3 = [1,2]
     
     # Procesar y guardar datos de adolescentes
     procesar_y_guardar(rutas_archivos_1, fechas_1, columnas_interes_1, renombrar_columnas_map_1, 
