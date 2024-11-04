@@ -6,7 +6,7 @@ PYTHON_INTERPRETER_WINDOWS = python
 VENV_DIR = venv
 NOMBRE_ENTORNO-VIRTUAL = venv
 SISTEMA_OPERATIVO := $(shell uname)
-ARCHIVO_DEPENDENCIAS = requirements.txt
+ARCHIVO_DEPENDENCIAS = ./requirements.txt
 
 ## VARIABLES GLOBALES PARA FORMATO DE 'echo'
 COLOR_BLUE="\033[1;34m"
@@ -15,10 +15,10 @@ COLOR_RESET="\033[0m"
 ## Linux / Darwin (macOS) / Windows_NT
 
 ## script de shell para [Linux / Darwin (macOS)]
-SCRIPT_ENTORNO-VIRTUAL_UNIX = ./helpers/setup_env.sh
+SCRIPT_ENTORNO-VIRTUAL_UNIX = ./helpers/scripts/setup_env.sh
 
 ## scripts .bat para [Windows_NT]
-SCRIPT_ENTORNO-VIRTUAL_WINDOWS = .\helpers\setup_env.bat
+SCRIPT_ENTORNO-VIRTUAL_WINDOWS = .\helpers\scripts\setup_env.bat
 
 ## Rutas de scripts para [Linux / Darwin (macOS)]
 DOWNLOAD_SCRIPT_ED = scripts/ed-download-data.py
@@ -42,7 +42,7 @@ venv:
         echo "   " ; \
         echo ${COLOR_BLUE} "Entorno virtual creado." ${COLOR_RESET} ; \
         echo "   " ; \
-        echo ${COLOR_BLUE} "Ejecute: source venv/bin/activate. " ${COLOR_RESET} ; \
+        echo ${COLOR_BLUE} "Ejecute: ' source venv/bin/activate ' ." ${COLOR_RESET} ; \
         echo "   " ; \
     elif [ "$(SISTEMA_OPERATIVO)" = "Windows_NT" ]; then \
         echo "   " ; \
