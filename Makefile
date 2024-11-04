@@ -32,6 +32,10 @@ PROCESS_SCRIPT_ED_WINDOWS = scripts\ed-proc-data.py
 DOWNLOAD_SCRIPT_SM_WINDOWS = scripts\sm-download-data.py
 PROCESS_SCRIPT_SM_WINDOWS = scripts\sm-proc-data.py
 
+## Ejecutar reportes Ydata
+REPORT_SCRIPT_WINDOWS = scripts\Ydata-datasets.py
+REPORT_SCRIPT = scripts/Ydata-datasets.py
+
 ## Install: python , pip , create virtual environment , python dependencies 
 .PHONY: venv 
 venv: 
@@ -101,6 +105,28 @@ process: venv download
         $(PYTHON_INTERPRETER_WINDOWS) $(PROCESS_SCRIPT_SM_WINDOWS) ; \
         echo "   " ; \
         echo $(COLOR_BLUE) "Procesamiento de datos realizada correctamente." $(COLOR_RESET); \
+        echo "   " ; \
+    else \
+        echo "Sistema operativo no soportado"; \
+        exit 1; \
+    fi
+
+## Reporte de datos
+report: venv
+	@if [ "$(SISTEMA_OPERATIVO)" = "Darwin" ] || [ "$(SISTEMA_OPERATIVO)" = "Linux" ]; then \
+        echo $(COLOR_BLUE) "Creando reportes Y-data..." $(COLOR_RESET) ; \
+        echo "   " ; \
+        $(PYTHON_INTERPRETER) $(REPORT_SCRIPT) ; \
+        echo "   " ; \
+        echo $(COLOR_BLUE) "Reportes creados exitosamente."  $(COLOR_RESET); \
+        echo "   " ; \
+    elif [ "$(SISTEMA_OPERATIVO)" = "Windows_NT" ]; then \
+        echo "   " ; \
+        echo $(COLOR_BLUE) "Creando reportes Y-data..."  $(COLOR_RESET) ; \
+        echo "   " ; \
+        $(PYTHON_INTERPRETER_WINDOWS) $(REPORT_SCRIPT_WINDOWS); \
+        echo "   " ; \
+        echo $(COLOR_BLUE) "Reportes creados exitosamente." $(COLOR_RESET) ; \
         echo "   " ; \
     else \
         echo "Sistema operativo no soportado"; \
