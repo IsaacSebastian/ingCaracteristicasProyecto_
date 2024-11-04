@@ -6,7 +6,7 @@ import os
 #Para datos de salud mental
 ruta_input = [os.path.join('data', 'interim', 'Adolescentes.csv'),
               os.path.join('data', 'interim', 'Adultos.csv'),
-              os.path.join('data', 'processed', 'Ensanut-data-p.csv'),
+              os.path.join('data', 'interim', 'Ensanut-data-p.csv'),
               os.path.join('data', 'interim', '1950.csv'),
               os.path.join('data', 'interim', '1960.csv'),
               os.path.join('data', 'interim', '1970.csv'),
