@@ -141,6 +141,15 @@ ENV/
 env.bak/
 venv.bak/
 
+# Carpetas del entono virtual
+venv/
+venv/bin
+venv/images
+venv/include
+venv/lib
+venv/share
+venv/pyvenv.cfg
+
 # Spyder project settings
 .spyderproject
 .spyproject
