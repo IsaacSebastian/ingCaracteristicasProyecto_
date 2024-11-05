@@ -1258,8 +1258,8 @@ formato_columnas(df,format_columns)
 processed_dataframes.append(['2020',df])
 print("Censo 2020 procesado correctamente!")
 
-os.makedirs("data/interim",exist_ok=True)
+os.makedirs("data/interim/CCPV",exist_ok=True)
 for df in processed_dataframes:
-    file_path=f"data/interim/{df[0]}.csv"
+    file_path=f"data/interim/CCPV/{df[0]}.csv"
     
     df[1].to_csv(file_path)
