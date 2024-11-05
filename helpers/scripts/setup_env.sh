@@ -42,19 +42,20 @@ echo "   "
 # Verificar si requirements.txt existe
 if [ -f "$2" ]; then
     echo "   "
-    echo -e "${COLOR_YELLOW_MUSTARD}Instalando dependencias desde requirements.txt ...${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW_MUSTARD} Para instalar dependencias dependencias desde requirements.txt ...${COLOR_RESET}"
     echo "   "
+    echo -e "${COLOR_YELLOW_MUSTARD} Ejecute el comando: pip install -q -r $2 ${COLOR_RESET}"
+    # pip install -q -r "$2"
     echo "   "
+    echo -e "${COLOR_YELLOW_MUSTARD} Para instalar dependencias dependencias desde requirements.txt ...${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW_MUSTARD} Para activar el entorno virtual ejecute... ${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW_MUSTARD} Ejecute: source $3/bin/activate ${COLOR_RESET}"
     echo "   "
-    pip install -q -r "$2"
-    echo "   "
-    echo "   "
-    echo "   "
-    echo -e "${COLOR_YELLOW_MUSTARD}Las dependencias de requirements.txt han sido instaladas correctamente.${COLOR_RESET}"
+    #echo -e "${COLOR_YELLOW_MUSTARD}Las dependencias de requirements.txt han sido instaladas correctamente.${COLOR_RESET}"
     echo "   "
 else
     echo "   "
-    echo -e "${COLOR_YELLOW_MUSTARD}requirements.txt no encontrado. No se instalarán dependencias.${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW_MUSTARD} requirements.txt no encontrado. No se instalarán dependencias.${COLOR_RESET}"
     echo "   "
 fi
 
