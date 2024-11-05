@@ -107,16 +107,25 @@ We will then aim to integrate the education and mental health data for a coheren
         .\venv\Scripts\activate
         ```
 
-5. Download both data sets:
+5. Instalar depedencias con archivo requirements.txt:
+    - Linux / macOS
+        ```bash
+        pip install -q -r requirements.txt
+        ```
+    - Windows
+        ```bash
+        pip install -r requirements.txt -q
+        ```
+
+6. Download both data sets:
     ```bash
     make download 
     ```
 
-6. Process both data sets:
+7. Process both data sets:
     ```bash
     make process
     ```
-
 
 # License
 This project is under the MIT license.

@@ -2,12 +2,16 @@
 PROJECT_NAME = ingCaracteristicasProyecto_
 PYTHON_VERSION = 3.10
 PYTHON_INTERPRETER = python3
-PYTHON_INTERPRETER_WINDOWS = python 
+PYTHON_INTERPRETER_WINDOWS = python
 VENV_DIR = venv
 NOMBRE_ENTORNO-VIRTUAL = venv
 SISTEMA_OPERATIVO := $(shell uname)
 ARCHIVO_DEPENDENCIAS = ./requirements.txt
-
+REPOSITORIO_URL = https://github.com/IsaacSebastian/ingCaracteristicasProyecto_.git
+GESTOR_PAQUETES = pip
+PYTHON_INSTALLER_EXE_URL = https://www.python.org/ftp/python/3.11.4/python-3.11.4-amd64.exe
+PYTHON_INSTALLER_EXE_NAME = python_installer_v3.11.4.exe
+ 
 ## VARIABLES GLOBALES PARA FORMATO DE 'echo'
 COLOR_BLUE="\033[1;34m"
 COLOR_RESET="\033[0m"
@@ -44,17 +48,20 @@ venv:
         echo ${COLOR_BLUE} "Creando entorno virtual..." ${COLOR_RESET} ; \
         bash $(SCRIPT_ENTORNO-VIRTUAL_UNIX) $(PYTHON_INTERPRETER) $(ARCHIVO_DEPENDENCIAS) $(NOMBRE_ENTORNO-VIRTUAL) ; \
         echo "   " ; \
-        echo ${COLOR_BLUE} "Entorno virtual creado." ${COLOR_RESET} ; \
+        echo ${COLOR_BLUE} " Entorno virtual creado. " ${COLOR_RESET} ; \
         echo "   " ; \
-        echo ${COLOR_BLUE} "Ejecute: ' source venv/bin/activate ' ." ${COLOR_RESET} ; \
+        echo ${COLOR_BLUE} " Ejecute: ' source venv/bin/activate ' ,  para activarlo. " ${COLOR_RESET} ; \
+        echo ${COLOR_BLUE} " Ejecute: ' pip install -q -r requirements.txt ' , para instalar dependencias. " ${COLOR_RESET} ; \
         echo "   " ; \
     elif [ "$(SISTEMA_OPERATIVO)" = "Windows_NT" ]; then \
         echo "   " ; \
         echo $(COLOR_BLUE) " Creando entorno virtual... " $(COLOR_RESET) ; \
         echo "   " ; \
-        ./$(SCRIPT_ENTORNO-VIRTUAL_WINDOWS) ; \
+        ./$(SCRIPT_ENTORNO-VIRTUAL_WINDOWS) $(PYTHON_INTERPRETER) $(ARCHIVO_DEPENDENCIAS) $(NOMBRE_ENTORNO-VIRTUAL) ${REPOSITORIO_URL} ; \
         echo "   " ; \
         echo $(COLOR_BLUE) " Entorno virtual creado. " $(COLOR_RESET) ; \
+        echo ${COLOR_BLUE} " Ejecute: ' source venv/bin/activate ' ,  para activar el entorno virtual. " ${COLOR_RESET} ; \
+        echo ${COLOR_BLUE} " Ejecute: ' pip install -q -r requirements.txt ' , para instalar dependencias en el entorno virtual. " ${COLOR_RESET} ; \
         echo "   " ; \
     else \
         echo " Sistema operativo no soportado "; \
