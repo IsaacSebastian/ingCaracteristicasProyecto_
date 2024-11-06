@@ -5,6 +5,8 @@ SET PYTHON_INTERPRETER=%1
 SET ARCHIVO_DEPENDECIAS=%2
 SET NOMBRE_ENTORNO-VIRTUAL=%3
 SET REPOSITORIO_URL=%4
+SET PYTHON_INSTALLER_EXE_URL=%5
+SET PYTHON_INSTALLER_EXE_NAME=%6
 
 REM Variables globales
 
@@ -70,28 +72,28 @@ IF %ERRORLEVEL% NEQ 0 (
     REM Descarga del ejecutable .exe de python.
     echo "   "
     echo "Descargando instalador de python.exe con 'curl'... "
-    curl -o ./python_installer_v3.11.4.exe https://www.python.org/ftp/python/3.11.4/python-3.11.4-amd64.exe
+    curl -o ./%PYTHON_INSTALLER_EXE_NAME% %PYTHON_INSTALLER_EXE_URL%
     echo "Descargando instalador de python.exe"
     echo "   "
 
     REM Realizando instalacion de python.
     echo "   "
     echo "Realizando instalacion de python..."
-    python_installer_v3.11.4.exe
+    %PYTHON_INSTALLER_EXE_NAME%
     echo "Instalacion de python realizada correctamente"
     echo "   "
 
     REM Se elimina ejecutable .exe , instalador de python.
     echo "   "
     echo "Eliminando archivo .exe ..."
-    del python_installer_v3.11.4.exe
+    del %PYTHON_INSTALLER_EXE_NAME%
     echo "Archivo eliminado .exe"
     echo "   "
 
     REM Para crear entorno virtual.
     echo "   "
     echo "Creando entorno virtual..."
-    python -m venv venv
+    %PYTHON_INTERPRETER% -m venv %NOMBRE_ENTORNO-VIRTUAL%
     echo "Entorno virtual creado."
     echo "   "
     
@@ -131,7 +133,7 @@ ELSE (
     REM Para crear entorno virtual.
     echo "   "
     echo "Creando entorno virtual..."
-    python -m venv venv
+    %PYTHON_INTERPRETER% -m venv %NOMBRE_ENTORNO-VIRTUAL%
     echo "Entorno virtual creado."
     echo "   "
     
