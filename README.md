@@ -80,6 +80,26 @@ We will then aim to integrate the education and mental health data for a coheren
 
 --------
 
+## Prerrequisitos
+
+Es necesario tener instalados los siguientes programas:
+
+- [Homebrew](https://brew.sh/): Gestor de paquetes para macOS.
+- `make`: Herramienta para automatizar la construcción de proyectos.
+- `python`: Lenguaje de programación.
+- `pip`: Gestor de paquetes de Python.
+- `curl`: Herramienta para transferir datos desde o hacia un servidor.
+- `wget`: Herramienta para descargar archivos desde la web.
+
+Puedes instalar Homebrew con el siguiente comando:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Este formato proporciona un enlace útil para instalar **Homebrew** y usa comandos sencillos para asegurar que los programas estén disponibles en el sistema.
+
+
 ## Running the Project
 
 1. First, clone the repository by running:
@@ -100,23 +120,37 @@ We will then aim to integrate the education and mental health data for a coheren
 4. Activate the virtual environment:
     - Linux / macOS
         ```bash
-        source venv\bin\activate
+        source venv/bin/activate
         ```
     - Windows
         ```bash
         .\venv\Scripts\activate
         ```
 
-5. Download both data sets:
+5. Instalar depedencias con archivo requirements.txt:
+    - Linux / macOS
+        ```bash
+        pip install -q -r requirements.txt
+        ```
+    - Windows
+        ```bash
+        pip install -r requirements.txt -q
+        ```
+
+6. Download both data sets:
     ```bash
     make download 
     ```
 
-6. Process both data sets:
+7. Process both data sets:
     ```bash
     make process
     ```
 
+8. Generar reportes de Y-data
+    ``` bash
+    make report-ydata
+    ```
 
 # License
 This project is under the MIT license.
