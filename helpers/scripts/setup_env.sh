@@ -9,15 +9,32 @@ NOMBRE_ENTORNO_VIRTUAL="$3"
 COLOR_YELLOW_MUSTARD="\033[1;33m"
 COLOR_RESET="\033[0m"
 
+# Verificar si Python está instalado
+if command -v python3 &>/dev/null; then
+    echo "Python está instalado."
+else
+    echo -e "${COLOR_YELLOW_MUSTARD} Python no está instalado. Instalando python...  ${COLOR_RESET}"
+    echo "   "
+    # Instalar Python 3.10
+    sudo apt install -y python3.10
+    echo "   "
+    echo -e "${COLOR_YELLOW_MUSTARD} Python se ha instalado correctamente. ${COLOR_RESET}"
+    echo "   "
+fi
+
 # Verificar si pip está instalado
 if ! command -v pip &> /dev/null
 then
     echo "   "
-    echo -e "${COLOR_YELLOW_MUSTARD}pip no está instalado. Instalando pip...${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW_MUSTARD} Pip no está instalado. Instalando pip...${COLOR_RESET}"
     echo "   "
     sudo apt install -y python3-pip
     echo "   "
     echo -e "${COLOR_YELLOW_MUSTARD}Se ha instalado pip correctamente.${COLOR_RESET}"
+    echo "   "
+else
+    echo "   "
+    echo -e "${COLOR_YELLOW_MUSTARD} Pip se encuentra instalado. ${COLOR_RESET}"
     echo "   "
 fi
 
@@ -48,7 +65,7 @@ if [ -f "$2" ]; then
     # pip install -q -r "$2"
     echo "   "
     echo -e "${COLOR_YELLOW_MUSTARD} Para instalar dependencias dependencias desde requirements.txt ...${COLOR_RESET}"
-    echo -e "${COLOR_YELLOW_MUSTARD} Para activar el entorno virtual ejecute... ${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW_MUSTARD} Para activar el entorno virtual ejecute el siguiente comando... ${COLOR_RESET}"
     echo -e "${COLOR_YELLOW_MUSTARD} Ejecute: source $3/bin/activate ${COLOR_RESET}"
     echo "   "
     #echo -e "${COLOR_YELLOW_MUSTARD}Las dependencias de requirements.txt han sido instaladas correctamente.${COLOR_RESET}"
