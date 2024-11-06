@@ -25,11 +25,11 @@ IF %ERRORLEVEL% NEQ 0 (
 
 REM Crear un entorno virtual
 echo Creando un entorno virtual...
-python -m venv myenv
+python -m venv env
 
 REM Activar el entorno virtual
 echo Activando el entorno virtual...
-call myenv\Scripts\activate
+call env\Scripts\activate
 
 REM Instalar los requisitos
 echo Instalando los requisitos desde requirements.txt...
