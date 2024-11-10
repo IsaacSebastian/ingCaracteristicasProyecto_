@@ -4,6 +4,9 @@ PYTHON_VERSION = 3.10
 PYTHON_INTERPRETER = python3
 PYTHON_INTERPRETER_WINDOWS = python
 VENV_DIR = venv
+DVC = dvc
+DATA_DIR = data/raw
+INTERIM_DIR=data/interim
 NOMBRE_ENTORNO-VIRTUAL = venv
 SISTEMA_OPERATIVO := $(shell uname)
 ARCHIVO_DEPENDENCIAS = ./requirements.txt
@@ -41,34 +44,40 @@ REPORT_SCRIPT_WINDOWS = scripts\Ydata-datasets.py
 REPORT_SCRIPT = scripts/Ydata-datasets.py
 
 ## Install: python , pip , create virtual environment , python dependencies 
-.PHONY: venv 
+.PHONY: venv download raw_data
+
+# Create virtual environment
 venv: 
 	@if [ "$(SISTEMA_OPERATIVO)" = "Darwin" ] || [ "$(SISTEMA_OPERATIVO)" = "Linux" ]; then \
         echo "   " ; \
-        echo ${COLOR_BLUE} "Creando entorno virtual..." ${COLOR_RESET} ; \
-        bash $(SCRIPT_ENTORNO-VIRTUAL_UNIX) $(PYTHON_INTERPRETER) $(ARCHIVO_DEPENDENCIAS) $(NOMBRE_ENTORNO-VIRTUAL) ; \
+        echo ${COLOR_BLUE} "Creating virtual environment..." ${COLOR_RESET} ; \
+        bash $(SCRIPT_ENTORNO_VIRTUAL_UNIX) $(PYTHON_INTERPRETER) $(ARCHIVO_DEPENDENCIAS) $(NOMBRE_ENTORNO_VIRTUAL) ; \
         echo "   " ; \
-        echo ${COLOR_BLUE} " Entorno virtual creado. " ${COLOR_RESET} ; \
+        echo ${COLOR_BLUE} "Virtual environment created." ${COLOR_RESET} ; \
         echo "   " ; \
-        echo ${COLOR_BLUE} " Ejecute: ' source venv/bin/activate ' ,  para activarlo. " ${COLOR_RESET} ; \
-        echo ${COLOR_BLUE} " Ejecute: ' pip install -q -r requirements.txt ' , para instalar dependencias. " ${COLOR_RESET} ; \
+        . venv/bin/activate ; \
+        echo ${COLOR_BLUE} "Virtual environment activated." ${COLOR_RESET} ; \
+        pip install -q -r requirements.txt ; \
+        echo ${COLOR_BLUE} "Dependencies installed!" ${COLOR_RESET} ; \
         echo "   " ; \
     elif [ "$(SISTEMA_OPERATIVO)" = "Windows_NT" ]; then \
         echo "   " ; \
-        echo $(COLOR_BLUE) " Creando entorno virtual... " $(COLOR_RESET) ; \
+        echo $(COLOR_BLUE) "Creating virtual environment..." $(COLOR_RESET) ; \
         echo "   " ; \
-        ./$(SCRIPT_ENTORNO-VIRTUAL_WINDOWS) $(PYTHON_INTERPRETER) $(ARCHIVO_DEPENDENCIAS) $(NOMBRE_ENTORNO-VIRTUAL) ${REPOSITORIO_URL} ${PYTHON_INSTALLER_EXE_URL} ${PYTHON_INSTALLER_EXE_NAME}; \
+        ./$(SCRIPT_ENTORNO_VIRTUAL_WINDOWS) $(PYTHON_INTERPRETER) $(ARCHIVO_DEPENDENCIAS) $(NOMBRE_ENTORNO_VIRTUAL) ${REPOSITORIO_URL} ${PYTHON_INSTALLER_EXE_URL} ${PYTHON_INSTALLER_EXE_NAME} ; \
         echo "   " ; \
-        echo $(COLOR_BLUE) " Entorno virtual creado. " $(COLOR_RESET) ; \
-        echo ${COLOR_BLUE} " Ejecute: ' source venv/bin/activate ' ,  para activar el entorno virtual. " ${COLOR_RESET} ; \
-        echo ${COLOR_BLUE} " Ejecute: ' pip install -q -r requirements.txt ' , para instalar dependencias en el entorno virtual. " ${COLOR_RESET} ; \
+        echo $(COLOR_BLUE) "Virtual environment created." $(COLOR_RESET) ; \
+        echo ${COLOR_BLUE} "Execute: ' source venv/bin/activate ' to activate the virtual environment." ${COLOR_RESET} ; \
+        echo ${COLOR_BLUE} "Execute: ' pip install -q -r requirements.txt ' to install dependencies." ${COLOR_RESET} ; \
         echo "   " ; \
     else \
-        echo " Sistema operativo no soportado "; \
+        echo "Unsupported operating system"; \
         exit 1; \
     fi
 
 ## Descarga de datos
+
+
 .PHONY: download
 download: venv
 	@if [ "$(SISTEMA_OPERATIVO)" = "Darwin" ] || [ "$(SISTEMA_OPERATIVO)" = "Linux" ]; then \
@@ -93,6 +102,10 @@ download: venv
         exit 1; \
     fi
 
+raw_data:download
+	$(VENV_DIR)/bin/dvc add $(DATA_DIR)
+	@echo "Raw data added to DVC"
+    
 ## Procesamiento de datos
 .PHONY: process
 process: venv download
@@ -118,6 +131,11 @@ process: venv download
         echo "Sistema operativo no soportado"; \
         exit 1; \
     fi
+
+interim_data:process
+	$(DVC) add $(INTERIM_DIR)
+	@echo "Add interim data to DVC"
+    
 
 ## Reporte de datos
 .PHONY: report-ydata
