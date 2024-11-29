@@ -469,6 +469,7 @@ columns=[
        'Clave de Localidad',
        'Localidad', 'Longitud', 'Latitud', 'Altitud', 
        'Población total','Población masculina', 'Población femenina',
+       'Población de 6 a 14 años','Población de 15 a 24 años','Población de 15 años y más',
        # Columnas relacionadas con la educacion
        'Población de 8 a 14 años que no sabe leer y escribir',
        'Población masculina de 8 a 14 años que no sabe leer y escribir',
@@ -520,7 +521,9 @@ float_columns=[
 ]
 
 integer_columns=[
+
        'Población total','Población masculina', 'Población femenina',
+       'Población de 6 a 14 años','Población de 15 a 24 años',
        'Población de 8 a 14 años que no sabe leer y escribir',
        'Población masculina de 8 a 14 años que no sabe leer y escribir',
        'Población femenina de 8 a 14 años que no sabe leer y escribir',
