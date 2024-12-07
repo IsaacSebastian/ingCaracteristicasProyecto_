@@ -80,25 +80,22 @@ We will then aim to integrate the education and mental health data for a coheren
 
 --------
 
-## Prerrequisitos
+## Prerequisites
 
-Es necesario tener instalados los siguientes programas:
+The following programs need to be installed:
 
-- [Homebrew](https://brew.sh/): Gestor de paquetes para macOS.
-- `make`: Herramienta para automatizar la construcción de proyectos.
-- `python`: Lenguaje de programación.
-- `pip`: Gestor de paquetes de Python.
-- `curl`: Herramienta para transferir datos desde o hacia un servidor.
-- `wget`: Herramienta para descargar archivos desde la web.
-
-Puedes instalar Homebrew con el siguiente comando:
-
+- [Homebrew](https://brew.sh/): Package manager for macOS.
+- `make`: Tool for automating project builds.
+- `python`: Programming language.
+- `pip`: Python package manager.
+- `curl`: Tool for transferring data to or from a server.
+- `wget`: Tool for downloading files from the web.
+You can install Homebrew using the following command:
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-Este formato proporciona un enlace útil para instalar **Homebrew** y usa comandos sencillos para asegurar que los programas estén disponibles en el sistema.
-
+This format provides a useful link to install **Homebrew** and uses simple commands to ensure that the programs are available on the system.
 
 ## Running the Project
 
@@ -127,7 +124,7 @@ Este formato proporciona un enlace útil para instalar **Homebrew** y usa comand
         .\venv\Scripts\activate
         ```
 
-5. Instalar depedencias con archivo requirements.txt:
+5. Install dependencies with a requirements.txt file:
     - Linux / macOS
         ```bash
         pip install -q -r requirements.txt
@@ -147,7 +144,7 @@ Este formato proporciona un enlace útil para instalar **Homebrew** y usa comand
     make process
     ```
 
-8. Generar reportes de Y-data
+8. Generate reports with Y-data:
     ``` bash
     make report-ydata
     ```
